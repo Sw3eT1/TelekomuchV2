@@ -46,7 +46,8 @@
             btnClose = new Button();
             btnOpen = new Button();
             btnSendData = new Button();
-            tBoxDataOut = new TextBox();
+            tBoxDataInput = new TextBox();
+            tBoxDataOutput = new TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -217,6 +218,7 @@
             btnClose.TabIndex = 1;
             btnClose.Text = "CLOSE";
             btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // btnOpen
             // 
@@ -238,22 +240,35 @@
             btnSendData.TabIndex = 2;
             btnSendData.Text = "SEND DATA";
             btnSendData.UseVisualStyleBackColor = true;
+            btnSendData.Click += btnSendData_Click;
             // 
-            // tBoxDataOut
+            // tBoxDataInput
             // 
-            tBoxDataOut.Cursor = Cursors.IBeam;
-            tBoxDataOut.Location = new Point(283, 23);
-            tBoxDataOut.Multiline = true;
-            tBoxDataOut.Name = "tBoxDataOut";
-            tBoxDataOut.Size = new Size(193, 297);
-            tBoxDataOut.TabIndex = 3;
+            tBoxDataInput.Cursor = Cursors.IBeam;
+            tBoxDataInput.Location = new Point(283, 23);
+            tBoxDataInput.Multiline = true;
+            tBoxDataInput.Name = "tBoxDataInput";
+            tBoxDataInput.PlaceholderText = "Data to be send";
+            tBoxDataInput.Size = new Size(193, 129);
+            tBoxDataInput.TabIndex = 3;
+            // 
+            // tBoxDataOutput
+            // 
+            tBoxDataOutput.Cursor = Cursors.IBeam;
+            tBoxDataOutput.Location = new Point(283, 158);
+            tBoxDataOutput.Multiline = true;
+            tBoxDataOutput.Name = "tBoxDataOutput";
+            tBoxDataOutput.PlaceholderText = "Data to be send";
+            tBoxDataOutput.Size = new Size(193, 154);
+            tBoxDataOutput.TabIndex = 4;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(515, 349);
-            Controls.Add(tBoxDataOut);
+            Controls.Add(tBoxDataOutput);
+            Controls.Add(tBoxDataInput);
             Controls.Add(btnSendData);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -285,8 +300,9 @@
         private Button btnClose;
         private Button btnOpen;
         private Button btnSendData;
-        private TextBox tBoxDataOut;
+        private TextBox tBoxDataInput;
         private Label label6;
         private ComboBox cBoxBAUDRATE;
+        private TextBox tBoxDataOutput;
     }
 }

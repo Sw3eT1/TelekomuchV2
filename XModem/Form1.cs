@@ -10,6 +10,7 @@ namespace XModem
         private string[] allPorts; // Trzymamy oryginaln¹ listê portów
         private SerialPort serialPort1 = new();
         private SerialPort serialPort2 = new();
+        string dataOutput;
 
         public Form1()
         {
@@ -79,6 +80,33 @@ namespace XModem
 
             cBoxCOMPORT1.Items.Clear();
             cBoxCOMPORT1.Items.AddRange(updatedPorts);
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen) serialPort1.Close();
+            if (serialPort2.IsOpen) serialPort2.Close();
+            progressBar1.Value = 0;
+        }
+
+        private void btnSendData_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if(tBoxDataInput.Text == "")
+                {
+                    throw new Exception("Brak danych do wyslania");
+                }
+
+                dataOutput = tBoxDataInput.Text;
+                serialPort1.WriteLine(dataOutput);
+                serialPort2.WriteLine(serialPort1.ReadExisting());
+                tBoxDataOutput.Text = serialPort2.ReadExisting();
+
+            }catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
