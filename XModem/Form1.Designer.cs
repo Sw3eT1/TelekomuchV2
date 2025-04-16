@@ -258,7 +258,7 @@
             tBoxDataOutput.Location = new Point(283, 158);
             tBoxDataOutput.Multiline = true;
             tBoxDataOutput.Name = "tBoxDataOutput";
-            tBoxDataOutput.PlaceholderText = "Data to be send";
+            tBoxDataOutput.PlaceholderText = "Data red from the port";
             tBoxDataOutput.Size = new Size(193, 154);
             tBoxDataOutput.TabIndex = 4;
             // 

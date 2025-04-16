@@ -7,10 +7,10 @@ namespace XModem
 {
     public partial class Form1 : Form
     {
-        private string[] allPorts; // Trzymamy oryginaln¹ listê portów
+        private string[] allPorts = SerialPort.GetPortNames(); 
         private SerialPort serialPort1 = new();
         private SerialPort serialPort2 = new();
-        string dataOutput;
+        string  dataOutput;
 
         public Form1()
         {
@@ -19,7 +19,6 @@ namespace XModem
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
-            allPorts = SerialPort.GetPortNames();
             cBoxCOMPORT1.Items.AddRange(allPorts);
             cBoxCOMPORT2.Items.AddRange(allPorts);
         }
@@ -99,8 +98,8 @@ namespace XModem
                 }
 
                 dataOutput = tBoxDataInput.Text;
-                serialPort1.WriteLine(dataOutput);
-                serialPort2.WriteLine(serialPort1.ReadExisting());
+                serialPort1.Write(dataOutput);
+                serialPort2.Write(serialPort1.ReadExisting());
                 tBoxDataOutput.Text = serialPort2.ReadExisting();
 
             }catch (Exception err)
