@@ -31,13 +31,9 @@
             groupBox1 = new GroupBox();
             label6 = new Label();
             cBoxBAUDRATE = new ComboBox();
-            label5 = new Label();
-            label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
-            cBoxPARITYBITS = new ComboBox();
-            cBoxSTOPBITS = new ComboBox();
             cBoxDATABITS = new ComboBox();
             cBoxCOMPORT2 = new ComboBox();
             cBoxCOMPORT1 = new ComboBox();
@@ -49,21 +45,19 @@
             tBoxDataInput = new TextBox();
             tBoxDataOutput = new TextBox();
             btnSendFile = new Button();
+            checkBox1 = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(checkBox1);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(cBoxBAUDRATE);
-            groupBox1.Controls.Add(label5);
-            groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
-            groupBox1.Controls.Add(cBoxPARITYBITS);
-            groupBox1.Controls.Add(cBoxSTOPBITS);
             groupBox1.Controls.Add(cBoxDATABITS);
             groupBox1.Controls.Add(cBoxCOMPORT2);
             groupBox1.Controls.Add(cBoxCOMPORT1);
@@ -79,7 +73,7 @@
             label6.AutoSize = true;
             label6.Location = new Point(23, 92);
             label6.Name = "label6";
-            label6.Size = new Size(68, 15);
+            label6.Size = new Size(67, 15);
             label6.TabIndex = 11;
             label6.Text = "BAUD RATE";
             // 
@@ -94,30 +88,12 @@
             cBoxBAUDRATE.TabIndex = 10;
             cBoxBAUDRATE.Text = "9600";
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(22, 179);
-            label5.Name = "label5";
-            label5.Size = new Size(71, 15);
-            label5.TabIndex = 9;
-            label5.Text = "PARITY BITS";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(22, 150);
-            label4.Name = "label4";
-            label4.Size = new Size(61, 15);
-            label4.TabIndex = 8;
-            label4.Text = "STOP BITS";
-            // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Location = new Point(22, 121);
             label3.Name = "label3";
-            label3.Size = new Size(62, 15);
+            label3.Size = new Size(60, 15);
             label3.TabIndex = 7;
             label3.Text = "DATA BITS";
             // 
@@ -126,7 +102,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(22, 64);
             label2.Name = "label2";
-            label2.Size = new Size(76, 15);
+            label2.Size = new Size(75, 15);
             label2.TabIndex = 6;
             label2.Text = "COM PORT 2";
             // 
@@ -135,31 +111,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(22, 35);
             label1.Name = "label1";
-            label1.Size = new Size(76, 15);
+            label1.Size = new Size(75, 15);
             label1.TabIndex = 5;
             label1.Text = "COM PORT 1";
-            // 
-            // cBoxPARITYBITS
-            // 
-            cBoxPARITYBITS.Cursor = Cursors.Hand;
-            cBoxPARITYBITS.FormattingEnabled = true;
-            cBoxPARITYBITS.Items.AddRange(new object[] { "None", "Odd", "Even" });
-            cBoxPARITYBITS.Location = new Point(110, 175);
-            cBoxPARITYBITS.Name = "cBoxPARITYBITS";
-            cBoxPARITYBITS.Size = new Size(121, 23);
-            cBoxPARITYBITS.TabIndex = 4;
-            cBoxPARITYBITS.Text = "None";
-            // 
-            // cBoxSTOPBITS
-            // 
-            cBoxSTOPBITS.Cursor = Cursors.Hand;
-            cBoxSTOPBITS.FormattingEnabled = true;
-            cBoxSTOPBITS.Items.AddRange(new object[] { "One", "Two" });
-            cBoxSTOPBITS.Location = new Point(110, 146);
-            cBoxSTOPBITS.Name = "cBoxSTOPBITS";
-            cBoxSTOPBITS.Size = new Size(121, 23);
-            cBoxSTOPBITS.TabIndex = 3;
-            cBoxSTOPBITS.Text = "One";
             // 
             // cBoxDATABITS
             // 
@@ -273,6 +227,16 @@
             btnSendFile.UseVisualStyleBackColor = true;
             btnSendFile.Click += btnSendFile_Click;
             // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(23, 169);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(49, 19);
+            checkBox1.TabIndex = 12;
+            checkBox1.Text = "CRC";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -298,13 +262,9 @@
 
         private GroupBox groupBox1;
         private Label label1;
-        private ComboBox cBoxPARITYBITS;
-        private ComboBox cBoxSTOPBITS;
         private ComboBox cBoxDATABITS;
         private ComboBox cBoxCOMPORT2;
         private ComboBox cBoxCOMPORT1;
-        private Label label5;
-        private Label label4;
         private Label label3;
         private Label label2;
         private GroupBox groupBox2;
@@ -317,5 +277,6 @@
         private ComboBox cBoxBAUDRATE;
         private TextBox tBoxDataOutput;
         private Button btnSendFile;
+        private CheckBox checkBox1;
     }
 }

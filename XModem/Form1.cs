@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic.Devices;
 using System;
 using System.IO.Ports;
 using System.Linq;
@@ -46,22 +47,15 @@ namespace XModem
                 }
 
                 serialPort1.PortName = portName1;
-                serialPort2.PortName = portName2;
+                //serialPort2.PortName = portName2;
 
                 serialPort1.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
-                serialPort2.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
+                //serialPort2.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
 
                 serialPort1.DataBits = Convert.ToInt32(cBoxDATABITS.Text);
-                serialPort2.DataBits = Convert.ToInt32(cBoxDATABITS.Text);
-
-                serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cBoxSTOPBITS.Text);
-                serialPort2.StopBits = (StopBits)Enum.Parse(typeof(StopBits), cBoxSTOPBITS.Text);
-
-                serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), cBoxPARITYBITS.Text);
-                serialPort2.Parity = (Parity)Enum.Parse(typeof(Parity), cBoxPARITYBITS.Text);
-
-                serialPort1.Open();
-                serialPort2.Open();
+               // serialPort2.DataBits = Convert.ToInt32(cBoxDATABITS.Text);
+                if(!serialPort1.IsOpen) serialPort1.Open();
+                //if (!serialPort2.IsOpen) serialPort2.Open();
 
                 progressBar1.Value = 100;
             }
@@ -84,7 +78,7 @@ namespace XModem
         private void btnClose_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen) serialPort1.Close();
-            if (serialPort2.IsOpen) serialPort2.Close();
+            //if (serialPort2.IsOpen) serialPort2.Close();
             progressBar1.Value = 0;
         }
 
@@ -104,12 +98,12 @@ namespace XModem
 
                 Thread sendThread = new Thread(() =>
                 {
-                    xmodem.Send(serialPort1, tempFilePath);
+                    xmodem.Send(serialPort1, tempFilePath, checkBox1.Checked);
                 });
 
                 Thread receiveThread = new Thread(() =>
                 {
-                    xmodem.Receive(serialPort2, receivedFilePath);
+                   // xmodem.Receive(serialPort2, receivedFilePath, checkBox1.Checked);
                 });
 
                 receiveThread.Start();
@@ -129,8 +123,8 @@ namespace XModem
 
                 tBoxDataOutput.Text = output;
 
-                File.Delete(tempFilePath);
-                File.Delete(receivedFilePath);
+                //File.Delete(tempFilePath);
+                //File.Delete(receivedFilePath);
             }
             catch (Exception err)
             {
@@ -146,18 +140,18 @@ namespace XModem
                 string filePath = ofd.FileName;
                 string receivedPath = Path.Combine(Path.GetTempPath(), "received_" + Path.GetFileName(filePath));
 
-                if (!serialPort1.IsOpen || !serialPort2.IsOpen)
-                {
-                    MessageBox.Show("Porty szeregowe musz¹ byæ otwarte przed wys³aniem danych.", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                //if (!serialPort1.IsOpen || !serialPort2.IsOpen)
+                //{
+                //    MessageBox.Show("Porty szeregowe musz¹ byæ otwarte przed wys³aniem danych.", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    return;
+                //}
 
                 Thread receiveThread = new Thread(() =>
                 {
                     try
                     {
                         var xmodem = new XModemProtocol();
-                        xmodem.ReceiveFile(serialPort2, receivedPath);
+                        //xmodem.ReceiveFile(serialPort2, receivedPath);
                     }
                     catch (Exception ex)
                     {
