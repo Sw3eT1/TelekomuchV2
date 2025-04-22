@@ -48,6 +48,7 @@
             btnSendData = new Button();
             tBoxDataInput = new TextBox();
             tBoxDataOutput = new TextBox();
+            btnSendFile = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -236,9 +237,9 @@
             btnSendData.Cursor = Cursors.Hand;
             btnSendData.Location = new Point(190, 228);
             btnSendData.Name = "btnSendData";
-            btnSendData.Size = new Size(87, 92);
+            btnSendData.Size = new Size(87, 45);
             btnSendData.TabIndex = 2;
-            btnSendData.Text = "SEND DATA";
+            btnSendData.Text = "SEND TEXT";
             btnSendData.UseVisualStyleBackColor = true;
             btnSendData.Click += btnSendData_Click;
             // 
@@ -262,11 +263,22 @@
             tBoxDataOutput.Size = new Size(193, 154);
             tBoxDataOutput.TabIndex = 4;
             // 
+            // btnSendFile
+            // 
+            btnSendFile.Location = new Point(190, 279);
+            btnSendFile.Name = "btnSendFile";
+            btnSendFile.Size = new Size(87, 41);
+            btnSendFile.TabIndex = 5;
+            btnSendFile.Text = "SEND FILE";
+            btnSendFile.UseVisualStyleBackColor = true;
+            btnSendFile.Click += btnSendFile_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(515, 349);
+            Controls.Add(btnSendFile);
             Controls.Add(tBoxDataOutput);
             Controls.Add(tBoxDataInput);
             Controls.Add(btnSendData);
@@ -304,5 +316,6 @@
         private Label label6;
         private ComboBox cBoxBAUDRATE;
         private TextBox tBoxDataOutput;
+        private Button btnSendFile;
     }
 }
