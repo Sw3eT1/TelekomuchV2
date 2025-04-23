@@ -43,7 +43,6 @@
             btnClose = new Button();
             btnOpen = new Button();
             tBoxDataInput = new TextBox();
-            tBoxDataOutput = new TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -207,25 +206,14 @@
             tBoxDataInput.Multiline = true;
             tBoxDataInput.Name = "tBoxDataInput";
             tBoxDataInput.PlaceholderText = "Data to be send";
-            tBoxDataInput.Size = new Size(193, 129);
+            tBoxDataInput.Size = new Size(193, 297);
             tBoxDataInput.TabIndex = 3;
-            // 
-            // tBoxDataOutput
-            // 
-            tBoxDataOutput.Cursor = Cursors.IBeam;
-            tBoxDataOutput.Location = new Point(283, 158);
-            tBoxDataOutput.Multiline = true;
-            tBoxDataOutput.Name = "tBoxDataOutput";
-            tBoxDataOutput.PlaceholderText = "Data red from the port";
-            tBoxDataOutput.Size = new Size(193, 162);
-            tBoxDataOutput.TabIndex = 4;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(515, 349);
-            Controls.Add(tBoxDataOutput);
             Controls.Add(tBoxDataInput);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -252,7 +240,6 @@
         private TextBox tBoxDataInput;
         private Label label6;
         private ComboBox cBoxBAUDRATE;
-        private TextBox tBoxDataOutput;
         private Button btnSendFile;
         private CheckBox checkBox1;
         private RadioButton rButtonTransmiter;

@@ -104,7 +104,7 @@ namespace XModem
 
             if (useCrc)
             {
-                port.Write(new byte[] { 0x43 }, 0, 1);
+                port.Write(new byte[] { 0x43 }, 0, 1); // 'C'
             }
             else
             {
@@ -112,6 +112,7 @@ namespace XModem
             }
 
             int packetNumber = 1;
+            byte[]? previousData = null;
 
             while (true)
             {
@@ -119,6 +120,19 @@ namespace XModem
                 if (firstByte == EOT)
                 {
                     port.Write(new byte[] { ACK }, 0, 1);
+
+                    // Zapisz ostatni blok z podmienionymi paddingami
+                    if (previousData != null)
+                    {
+                        for (int i = previousData.Length - 1; i >= 0; i--)
+                        {
+                            if (previousData[i] == 0x1A)
+                                previousData[i] = 0x20;
+                            else
+                                break;
+                        }
+                        fs.Write(previousData, 0, previousData.Length);
+                    }
                     break;
                 }
 
@@ -150,15 +164,19 @@ namespace XModem
                     byte receivedChecksum = block[blockSize - 2];
                     byte calculatedChecksum = CalcChecksum(data);
                     isDataValid = receivedChecksum == calculatedChecksum;
-                    // W przypadku braku CRC, ignorujemy bajt na indeksie blockSize - 1.
                 }
 
                 if (isPacketNumberValid && isDataValid && receivedPacketNumber == (byte)packetNumber)
                 {
-                    fs.Write(data, 0, data.Length);
+                    // Zapisz poprzedni pakiet (bez modyfikacji)
+                    if (previousData != null)
+                    {
+                        fs.Write(previousData, 0, previousData.Length);
+                    }
+
+                    previousData = data;
                     port.Write(new byte[] { ACK }, 0, 1);
-                    packetNumber++;
-                    if (packetNumber > 255) packetNumber = 0;
+                    packetNumber = (packetNumber + 1) % 256;
                 }
                 else if (receivedPacketNumber == (byte)packetNumber)
                 {
@@ -170,6 +188,7 @@ namespace XModem
                 }
             }
         }
+
 
         public void SendFile(SerialPort port, string filePath, bool useCrc)
         {
@@ -197,13 +216,13 @@ namespace XModem
                 if (useCrc)
                 {
                     ushort calculatedCrc = CalculateCRC(packet);
-                    block[PacketSize - 2] = (byte)(calculatedCrc >> 8);  // Starszy bajt CRC (indeks 131)
-                    block[PacketSize - 1] = (byte)(calculatedCrc & 0xFF); // Młodszy bajt CRC (indeks 132)
+                    block[PacketSize + 5 - 2] = (byte)(calculatedCrc >> 8);  // Starszy bajt CRC (indeks 131)
+                    block[PacketSize + 5  - 1] = (byte)(calculatedCrc & 0xFF); // Młodszy bajt CRC (indeks 132)
                 }
                 else
                 {
-                    block[PacketSize - 2] = CalcChecksum(packet); // Suma kontrolna (indeks 131) - używamy tylko jednego bajtu
-                                                                 // W przypadku braku CRC, bajt na indeksie blockSize - 1 (132) pozostaje nieużywany dla sumy kontrolnej.
+                    block[PacketSize + 5 - 2] = CalcChecksum(packet); // Suma kontrolna (indeks 131) - używamy tylko jednego bajtu
+                                                                  // W przypadku braku CRC, bajt na indeksie blockSize - 1 (132) pozostaje nieużywany dla sumy kontrolnej.
                 }
 
                 port.Write(block, 0, block.Length);
@@ -269,14 +288,15 @@ namespace XModem
         //            {
         //                port.Write(new byte[] { NAK }, 0, 1);
         //            }
-        //        }else
+        //        }
+        //        else
         //        {
         //            ushort calculatedCrc = CalculateCRC(data);
         //            byte blok1 = block[data.Length - 2] = (byte)(calculatedCrc >> 8);  // Starszy bajt CRC (indeks 131)
         //            byte blok2 = block[data.Length - 1] = (byte)(calculatedCrc & 0xFF);
         //            byte checksum1 = block[PacketSize + 3];
         //            byte checksum2 = block[PacketSize + 4];
-        //            if (blockNum == (byte)packetNumber && blockComp == (byte)~packetNumber && checksum1 == blok1 && checksum2 == blok2);
+        //            if (blockNum == (byte)packetNumber && blockComp == (byte)~packetNumber && checksum1 == blok1 && checksum2 == blok2) ;
         //            {
         //                fs.Write(data, 0, data.Length);
         //                port.Write(new byte[] { ACK }, 0, 1);

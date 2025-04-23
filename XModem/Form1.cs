@@ -89,27 +89,10 @@ namespace XModem
                     xmodem.Send(serialPort1, tempFilePath, checkBox1.Checked);
                 });
 
-                Thread receiveThread = new Thread(() =>
-                {
-                    // xmodem.Receive(serialPort2, receivedFilePath, checkBox1.Checked);
-                });
-
-                receiveThread.Start();
                 Thread.Sleep(100);
                 sendThread.Start();
 
                 sendThread.Join();
-                receiveThread.Join();
-
-                //bez usuwania kwadratow zeby dpoelnilo wiadomosc
-                //tBoxDataOutput.Text = File.ReadAllText(receivedFilePath);
-
-                string output = File.ReadAllText(receivedFilePath);
-                int eofIndex = output.IndexOf((char)0x1A);
-                if (eofIndex >= 0)
-                    output = output.Substring(0, eofIndex);
-
-                tBoxDataOutput.Text = output;
 
             }
             catch (Exception err)
@@ -126,21 +109,21 @@ namespace XModem
                 string filePath = ofd.FileName;
                 string receivedPath = Path.Combine(Path.GetTempPath(), "received_" + Path.GetFileName(filePath));
 
-                Thread receiveThread = new Thread(() =>
-                {
-                    try
-                    {
-                        var xmodem = new XModemProtocol();
-                        //xmodem.ReceiveFile(serialPort2, receivedPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            MessageBox.Show("B³¹d odbioru: " + ex.Message);
-                        }));
-                    }
-                });
+                //Thread receiveThread = new Thread(() =>
+                //{
+                //    try
+                //    {
+                //        var xmodem = new XModemProtocol();
+                //        //xmodem.ReceiveFile(serialPort2, receivedPath);
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        Invoke(new Action(() =>
+                //        {
+                //            MessageBox.Show("B³¹d odbioru: " + ex.Message);
+                //        }));
+                //    }
+                //});
 
                 Thread sendThread = new Thread(() =>
                 {
@@ -149,26 +132,6 @@ namespace XModem
                         var xmodem = new XModemProtocol();
                         Thread.Sleep(100); // Delay dla NAK
                         xmodem.SendFile(serialPort1, filePath, checkBox1.Checked);
-
-                        Invoke(new Action(() =>
-                        {
-                            // Próbujemy odczytaæ zawartoœæ i wkleiæ do pola tekstowego
-                            try
-                            {
-                                string content = File.ReadAllText(receivedPath);
-                                int eofIndex = content.IndexOf((char)0x1A);
-                                if (eofIndex >= 0)
-                                    content = content.Substring(0, eofIndex);
-
-                                tBoxDataOutput.Text = content;
-                                MessageBox.Show("Plik zosta³ wys³any i odebrany poprawnie!", "Sukces");
-                            }
-                            catch
-                            {
-                                tBoxDataOutput.Text = "[Plik odebrany, ale nie jest w formacie tekstowym]";
-                                MessageBox.Show("Plik odebrany, ale nie mo¿na wyœwietliæ jako tekst.", "Info");
-                            }
-                        }));
                     }
                     catch (Exception ex)
                     {
@@ -179,10 +142,10 @@ namespace XModem
                     }
                 });
 
-                receiveThread.IsBackground = true;
+                //receiveThread.IsBackground = true;
                 sendThread.IsBackground = true;
 
-                receiveThread.Start();
+                //receiveThread.Start();
                 sendThread.Start();
             }
         }
@@ -199,6 +162,7 @@ namespace XModem
                     string filePath = ofd.FileName;
                     var xmodem = new XModemProtocol();
                     xmodem.ReceiveFile(serialPort1, filePath, checkBox1.Checked);
+                    string output = File.ReadAllText(filePath);
                 }
             }
         }
