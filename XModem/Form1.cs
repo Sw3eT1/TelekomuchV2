@@ -21,7 +21,7 @@ namespace XModem
         private void Form1_Load_1(object sender, EventArgs e)
         {
             cBoxCOMPORT1.Items.AddRange(allPorts);
-            cBoxCOMPORT2.Items.AddRange(allPorts);
+
         }
 
         private void cBoxCOMPORT1_SelectedIndexChanged(object sender, EventArgs e)
@@ -30,8 +30,7 @@ namespace XModem
 
             var updatedPorts = allPorts.Where(p => p != selectedPort).ToArray();
 
-            cBoxCOMPORT2.Items.Clear();
-            cBoxCOMPORT2.Items.AddRange(updatedPorts);
+
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
@@ -39,12 +38,8 @@ namespace XModem
             try
             {
                 string portName1 = cBoxCOMPORT1.Text;
-                string portName2 = cBoxCOMPORT2.Text;
 
-                if (portName1 == portName2)
-                {
-                    throw new Exception("Nie mo¿na wybraæ tych samych portów COM.");
-                }
+
 
                 serialPort1.PortName = portName1;
                 //serialPort2.PortName = portName2;
@@ -52,9 +47,8 @@ namespace XModem
                 serialPort1.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
                 //serialPort2.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
 
-                serialPort1.DataBits = Convert.ToInt32(cBoxDATABITS.Text);
-               // serialPort2.DataBits = Convert.ToInt32(cBoxDATABITS.Text);
-                if(!serialPort1.IsOpen) serialPort1.Open();
+
+                if (!serialPort1.IsOpen) serialPort1.Open();
                 //if (!serialPort2.IsOpen) serialPort2.Open();
 
                 progressBar1.Value = 100;
@@ -65,15 +59,6 @@ namespace XModem
             }
         }
 
-        private void cBoxCOMPORT2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string selectedPort = cBoxCOMPORT2.SelectedItem.ToString();
-
-            var updatedPorts = allPorts.Where(p => p != selectedPort).ToArray();
-
-            cBoxCOMPORT1.Items.Clear();
-            cBoxCOMPORT1.Items.AddRange(updatedPorts);
-        }
 
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -103,7 +88,7 @@ namespace XModem
 
                 Thread receiveThread = new Thread(() =>
                 {
-                   // xmodem.Receive(serialPort2, receivedFilePath, checkBox1.Checked);
+                    // xmodem.Receive(serialPort2, receivedFilePath, checkBox1.Checked);
                 });
 
                 receiveThread.Start();
@@ -205,6 +190,28 @@ namespace XModem
                 receiveThread.Start();
                 sendThread.Start();
             }
+        }
+
+        private void rButtonReceiver_CheckedChanged(object sender, EventArgs e)
+        {
+            btnSendFile.Enabled = false;
+            btnSendData.Enabled = false;
+            if (rButtonReceiver.Checked)
+            {
+                var ofd = new SaveFileDialog();
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = ofd.FileName;
+                    var xmodem = new XModemProtocol();
+                    xmodem.ReceiveFile(serialPort1, filePath);
+                }
+            }
+        }
+
+        private void rButtonTransmiter_CheckedChanged(object sender, EventArgs e)
+        {
+            btnSendFile.Enabled = true;
+            btnSendData.Enabled = true;
         }
     }
 }
