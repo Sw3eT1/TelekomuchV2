@@ -2,6 +2,7 @@ using Microsoft.VisualBasic.Devices;
 using System;
 using System.IO.Ports;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace XModem
@@ -13,6 +14,10 @@ namespace XModem
         private SerialPort serialPort2 = new();
         string dataOutput;
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
         public Form1()
         {
             InitializeComponent();
@@ -20,6 +25,7 @@ namespace XModem
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+            AllocConsole();
             cBoxCOMPORT1.Items.AddRange(allPorts);
 
         }
@@ -42,14 +48,11 @@ namespace XModem
 
 
                 serialPort1.PortName = portName1;
-                //serialPort2.PortName = portName2;
 
                 serialPort1.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
-                //serialPort2.BaudRate = Convert.ToInt32(cBoxBAUDRATE.Text);
 
 
                 if (!serialPort1.IsOpen) serialPort1.Open();
-                //if (!serialPort2.IsOpen) serialPort2.Open();
 
                 progressBar1.Value = 100;
             }
@@ -63,7 +66,7 @@ namespace XModem
         private void btnClose_Click(object sender, EventArgs e)
         {
             if (serialPort1.IsOpen) serialPort1.Close();
-            //if (serialPort2.IsOpen) serialPort2.Close();
+
             progressBar1.Value = 0;
         }
 
@@ -108,8 +111,6 @@ namespace XModem
 
                 tBoxDataOutput.Text = output;
 
-                //File.Delete(tempFilePath);
-                //File.Delete(receivedFilePath);
             }
             catch (Exception err)
             {
@@ -124,12 +125,6 @@ namespace XModem
             {
                 string filePath = ofd.FileName;
                 string receivedPath = Path.Combine(Path.GetTempPath(), "received_" + Path.GetFileName(filePath));
-
-                //if (!serialPort1.IsOpen || !serialPort2.IsOpen)
-                //{
-                //    MessageBox.Show("Porty szeregowe musz¹ byæ otwarte przed wys³aniem danych.", "B³¹d", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //    return;
-                //}
 
                 Thread receiveThread = new Thread(() =>
                 {
@@ -153,7 +148,7 @@ namespace XModem
                     {
                         var xmodem = new XModemProtocol();
                         Thread.Sleep(100); // Delay dla NAK
-                        xmodem.SendFile(serialPort1, filePath);
+                        xmodem.SendFile(serialPort1, filePath, checkBox1.Checked);
 
                         Invoke(new Action(() =>
                         {
@@ -203,7 +198,7 @@ namespace XModem
                 {
                     string filePath = ofd.FileName;
                     var xmodem = new XModemProtocol();
-                    xmodem.ReceiveFile(serialPort1, filePath);
+                    xmodem.ReceiveFile(serialPort1, filePath, checkBox1.Checked);
                 }
             }
         }
